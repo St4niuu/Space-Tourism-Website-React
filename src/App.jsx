@@ -2,7 +2,7 @@
 
 import { createGlobalStyle } from 'styled-components'
 import { Routes, Route, useLocation } from 'react-router-dom'
-import Nav from './components/Nav'
+import Header from './components/Header'
 import Redirect from './components/Redirect'
 import Home from './pages/Home'
 import Destination from './pages/Destination'
@@ -29,6 +29,10 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     box-sizing: border-box;
   }
+  a:link, a:visited, a:active, a:hover {
+    text-decoration: none;
+    color: white;
+  }
   html, body, #root {
     width: 100%;
     height: 100%;
@@ -43,11 +47,13 @@ const GlobalStyle = createGlobalStyle`
     @media (min-width: 1024px) {
       background-image: ${(props) => setImageBackground(props.path, 'desktop')};
     }
+    overflow: hidden;
+    position: relative;
   }
 
 `
 
-// Actual app
+// Main app
 
 function App() {
 
@@ -55,7 +61,7 @@ function App() {
     <>
       <GlobalStyle path={useLocation().pathname} />
       <Routes>
-        <Route path='/' element={<Nav />}>
+        <Route path='/' element={<Header />}>
           <Route index={true} element={<Home />} />
           <Route path='destination'>
             <Route index={true} element={<Redirect location='destination' />} />
