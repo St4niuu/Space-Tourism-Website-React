@@ -18,6 +18,12 @@ const StyledHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem 0 1.5rem;
+  @media (min-width: 620px) and (max-width: 1023px) {
+    height: 15%;
+    min-height: 7rem;
+    max-height: 8rem;
+    padding: 0 0 0 2rem;
+  }
   > a {
     display: grid;
     place-items: center;
@@ -52,6 +58,7 @@ const StyledHeader = styled.div`
       align-items: center;
       gap: 1.5rem;
       font-size: 110%;
+      line-height: 2rem;
       font-family: 'Barlow Condensed', sans-serif;
       text-transform: uppercase;
       letter-spacing: 0.1rem;
@@ -74,6 +81,37 @@ const StyledHeader = styled.div`
   }
   > .tablet-nav {
     display: none;
+    width: 65%;
+    min-width: 27rem;
+    max-width: 30rem;
+    height: 100%;
+    background-color: rgba(255,255,255, 0.04);
+    backdrop-filter: blur(25px);
+    justify-content: space-evenly;
+    @media (min-width: 620px) and (max-width: 1023px) {
+      display: flex;
+    }
+    > a {
+      height: 100%;
+      display: grid;
+      place-items: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1rem;
+      font-size: 105%;
+      position: relative;
+      &.active {
+        &::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          height: 3px;
+          width: 100%;
+          background-color: white;
+        }
+      }
+    }
   }
   > .desktop-nav {
     display: none;
@@ -85,13 +123,15 @@ const StyledHeader = styled.div`
 
 function Header() {
 
-  const [isNavOpen, setNavIsOpen] = useState(false)
+  const [isNavOpen, setIsNavOpen] = useState(false)
+
+  const navElements = ['home', 'destination', 'crew', 'technology']
 
   return (
     <>
       <StyledHeader>
-        <NavLink to='/'><img src='/logo.svg' alt='site-logo' /></NavLink>
-        <img src='/icon-hamburger.svg' alt='open-menu' onClick={() => setNavIsOpen(true)} />
+        <NavLink to='/'><img src='/logo.svg' alt='site-logo' onClick={() => setIsNavOpen(false)} /></NavLink>
+        <img src='/icon-hamburger.svg' alt='open-menu' onClick={() => setIsNavOpen(true)} />
 
         {/* Navbar's here */}
         
@@ -101,26 +141,37 @@ function Header() {
           animate={{ x: isNavOpen ? '0%' : '100%' }}
           transition={{ duration: 0.5, type: 'tween' }}
         >
-          <img src='/icon-close.svg' alt='close-menu' onClick={() => setNavIsOpen(false)} />
-          <NavLink end={true} to='/'>
-            <span>00</span>
-            <span>Home</span>
-          </NavLink>
-          <NavLink to='destination'>
-            <span>01</span>
-            <span>Destination</span>
-          </NavLink>
-          <NavLink to='crew'>
-            <span>02</span>
-            <span>Crew</span></NavLink>
-          <NavLink to='technology'>
-            <span>03</span>
-            <span>Technology</span>
-          </NavLink>
+          <img src='/icon-close.svg' alt='close-menu' onClick={() => setIsNavOpen(false)} />
+          {navElements.map((element, index) => {
+            switch (index) {
+              case 0: 
+                return <NavLink end={true} to='/' onClick={() => setIsNavOpen(false)}>
+                  <span>0{index}</span>
+                  <span>{element}</span>
+                </NavLink>
+
+              default: 
+                return <NavLink to={'/'.concat(element)} onClick={() => setIsNavOpen(false)}>
+                  <span>0{index}</span>
+                  <span>{element}</span>
+                </NavLink>   
+            }
+          })}
         </motion.div>
 
         <div className='tablet-nav'>
-          
+          {navElements.map((element, index) => {
+            switch (index) {
+              case 0:
+                return <NavLink index={true} to='/'>
+                  {element}
+                </NavLink>
+              default:
+                return <NavLink to={'/'.concat(element)}>
+                  {element}
+                </NavLink>
+            }
+          })}
         </div>
 
         <div className='desktop-nav'>

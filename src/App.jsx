@@ -67,7 +67,7 @@ function App() {
             <Route index={true} element={<Redirect location='destination' />} />
             <Route path=':id' element={<Destination />} />
           </Route>
-          <Route path='crew' element={<Crew />}>
+          <Route path='crew'>
             <Route index={true} element={<Redirect location='crew' />} />
             <Route path=':id' element={<Crew />} />
           </Route>

@@ -7,7 +7,7 @@ import { Navigate } from 'react-router-dom'
 function Redirect(props) {
   switch (props.location) {
     case 'destination': return <Navigate to='/destination/moon' />
-    case 'crew': return <Navigate to='/destination/comander' />
+    case 'crew': return <Navigate to='/crew/comander' />
   }
 }
 
