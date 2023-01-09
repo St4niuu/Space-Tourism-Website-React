@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import styled from 'styled-components'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 // Setting header styles
 
@@ -24,6 +24,12 @@ const StyledHeader = styled.div`
     max-height: 8rem;
     padding: 0 0 0 2rem;
   }
+  @media (min-width: 1024px) {
+    height: 17.5%;
+    min-height: 8rem;
+    max-height: 9rem;
+    padding: 2rem 0 0 2.5rem;
+  }
   > a {
     display: grid;
     place-items: center;
@@ -33,8 +39,15 @@ const StyledHeader = styled.div`
       display: none;
     }
   }
+  > div > a {
+    font-size: 105%;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
   > .mobile-nav {
-    position: absolute;
+    position: fixed;
+    z-index: 1;
     top: 0;
     right: 0;
     transform: translateX(100%);
@@ -57,11 +70,7 @@ const StyledHeader = styled.div`
       display: flex;
       align-items: center;
       gap: 1.5rem;
-      font-size: 110%;
       line-height: 2rem;
-      font-family: 'Barlow Condensed', sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 0.1rem;
       position: relative;
       &.active {
         &::before {
@@ -95,10 +104,6 @@ const StyledHeader = styled.div`
       height: 100%;
       display: grid;
       place-items: center;
-      font-family: 'Barlow Condensed', sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 0.1rem;
-      font-size: 105%;
       position: relative;
       &.active {
         &::after {
@@ -115,6 +120,65 @@ const StyledHeader = styled.div`
   }
   > .desktop-nav {
     display: none;
+    width: 60%;
+    height: 100%;
+    padding: 0 3rem;
+    background-color: rgba(255,255,255, 0.04);
+    backdrop-filter: blur(25px);
+    position: relative;
+    justify-content: space-around;
+    @media (min-width: 1024px) {
+      display: flex;
+    }
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 5%;
+      transform: translateX(-100%);
+      height: 1px;
+      width: 60%;
+      background-color: #979797;
+    }
+    > a {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+      &::before {
+        position: absolute;
+        z-index: 1;
+        content: '';
+        left: 0;
+        top: 100%;
+        height: 3px;
+        width: 100%;
+        background-color: white;
+        transform: scaleX(0);
+        transition: 0.2s;
+        transform-origin: 200%;
+      }
+      &:hover {
+        &::before {
+          transform: scaleX(1);
+        }
+      }
+      &.active {
+        &::after {
+          position: absolute;
+          content: '';
+          left: 0;
+          top: 100%;
+          height: 3px;
+          width: 100%;
+          background-color: #979797;
+        }
+      }
+      > span:nth-of-type(1) {
+        font-weight: bold;
+      }
+    }
   }
 
 `
@@ -145,13 +209,13 @@ function Header() {
           {navElements.map((element, index) => {
             switch (index) {
               case 0: 
-                return <NavLink end={true} to='/' onClick={() => setIsNavOpen(false)}>
+                return <NavLink key={index} end={true} to='/' onClick={() => setIsNavOpen(false)}>
                   <span>0{index}</span>
                   <span>{element}</span>
                 </NavLink>
 
-              default: 
-                return <NavLink to={'/'.concat(element)} onClick={() => setIsNavOpen(false)}>
+              default:
+                return <NavLink key={index} to={'/'.concat(element)} onClick={() => setIsNavOpen(false)}>
                   <span>0{index}</span>
                   <span>{element}</span>
                 </NavLink>   
@@ -163,11 +227,12 @@ function Header() {
           {navElements.map((element, index) => {
             switch (index) {
               case 0:
-                return <NavLink index={true} to='/'>
+                return <NavLink key={index} end={true} to='/'>
                   {element}
                 </NavLink>
+
               default:
-                return <NavLink to={'/'.concat(element)}>
+                return <NavLink key={index} to={'/'.concat(element)}>
                   {element}
                 </NavLink>
             }
@@ -175,7 +240,21 @@ function Header() {
         </div>
 
         <div className='desktop-nav'>
-          
+          {navElements.map((element, index) => {
+            switch (index) {
+              case 0:
+                return <NavLink key={index} end={true} to='/'>
+                  <span>0{index}</span>
+                  <span>{element}</span>
+                </NavLink>
+                
+              default:
+                return <NavLink key={index} to={'/'.concat(element)}>
+                  <span>0{index}</span>
+                  <span>{element}</span>
+                </NavLink>
+            }
+          })}
         </div>
       </StyledHeader>
       <Outlet />
